@@ -1,4 +1,4 @@
-// STEP 2: HANDLING THE DATA
+// STEP 2: SIGN IN AND DATA COLLECTION
 // linking the firestore database 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
@@ -9,7 +9,6 @@ firebase.auth().signInWithEmailAndPassword(email, password)
     // Signed in 
     const user = userCredential.user;
     console.log("User signed in:", user);
-
     // Get a reference to the Firestore database
     const db = firebase.firestore();
 
