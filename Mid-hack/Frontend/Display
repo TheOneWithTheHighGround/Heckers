@@ -1,1 +1,189 @@
+import React, { useState } from 'react';
+// Import Lucide icons for UI elements
+import { MapPin, Camera, ThumbsUp, ThumbsDown, Search, Filter, MessageSquare, Share2 } from 'lucide-react';
 
+const Dashboard = () => {
+  // State management for active view (map/list)
+  const [activeTab, setActiveTab] = useState('map');
+
+  // Mock data for infrastructure issues
+  // In production, this would come from Firebase/API
+  const [issues] = useState([
+    {
+      id: 1,
+      title: 'Large Pothole on Main Street',
+      description: 'Deep pothole causing traffic hazards',
+      category: 'Roads',
+      status: 'In Progress',
+      location: 'Main Street, Downtown',
+      votes: 45,
+      comments: 12,
+      date: '2024-11-23',
+      imageUrl: '/api/placeholder/400/300'  // Placeholder image for demo
+    },
+    {
+      id: 2,
+      title: 'Broken Street Light',
+      description: 'Street light not working for past week',
+      category: 'Lighting',
+      status: 'Reported',
+      location: 'Park Avenue',
+      votes: 23,
+      comments: 5,
+      date: '2024-11-22',
+      imageUrl: '/api/placeholder/400/300'  // Placeholder image for demo
+    }
+  ]);
+
+  return (
+    // Main container with light gray background
+    <div className="min-h-screen bg-gray-50">
+      {/* Header Section */}
+      <header className="bg-white shadow">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex justify-between items-center">
+            {/* App Title */}
+            <h1 className="text-3xl font-bold text-gray-900">CivicWatch</h1>
+            {/* Report Issue Button */}
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+              <Camera className="w-5 h-5" />
+              Report Issue
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content Section */}
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {/* Search and Filter Bar */}
+        <div className="bg-white p-4 rounded-lg shadow mb-6">
+          <div className="flex gap-4">
+            {/* Search Input with Icon */}
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search issues..."
+                className="w-full pl-10 pr-4 py-2 border rounded-lg"
+              />
+            </div>
+            {/* Filter Button */}
+            <button className="flex items-center gap-2 px-4 py-2 border rounded-lg">
+              <Filter className="w-5 h-5" />
+              Filters
+            </button>
+          </div>
+        </div>
+
+        {/* View Toggle Section */}
+        <div className="bg-white rounded-lg shadow mb-6">
+          {/* Navigation Tabs */}
+          <div className="border-b">
+            <nav className="flex">
+              {/* Map View Tab */}
+              <button
+                onClick={() => setActiveTab('map')}
+                className={`px-4 py-3 ${
+                  activeTab === 'map'
+                    ? 'border-b-2 border-blue-500 text-blue-600'  // Active state
+                    : 'text-gray-500'  // Inactive state
+                }`}
+              >
+                Map View
+              </button>
+              {/* List View Tab */}
+              <button
+                onClick={() => setActiveTab('list')}
+                className={`px-4 py-3 ${
+                  activeTab === 'list'
+                    ? 'border-b-2 border-blue-500 text-blue-600'  // Active state
+                    : 'text-gray-500'  // Inactive state
+                }`}
+              >
+                List View
+              </button>
+            </nav>
+          </div>
+
+          {/* Content Area - Shows either Map or List based on activeTab */}
+          <div className="p-4">
+            {activeTab === 'map' ? (
+              // Map View Placeholder
+              // TODO: Integrate Google Maps API here
+              <div className="bg-gray-200 h-96 rounded-lg flex items-center justify-center">
+                <span className="text-gray-500">Map View Coming Soon</span>
+              </div>
+            ) : (
+              // List View - Shows all reported issues
+              <div className="space-y-4">
+                {/* Map through issues array to create issue cards */}
+                {issues.map((issue) => (
+                  <div key={issue.id} className="bg-white border rounded-lg p-4">
+                    <div className="flex gap-4">
+                      {/* Issue Image */}
+                      <img
+                        src={issue.imageUrl}
+                        alt={issue.title}
+                        className="w-32 h-32 object-cover rounded-lg"
+                      />
+                      {/* Issue Details */}
+                      <div className="flex-1">
+                        {/* Title, Description, and Status Badge */}
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-semibold text-lg">{issue.title}</h3>
+                            <p className="text-gray-600 text-sm mt-1">{issue.description}</p>
+                          </div>
+                          {/* Status Badge - Changes color based on status */}
+                          <span className={`px-3 py-1 rounded-full text-sm ${
+                            issue.status === 'In Progress' 
+                              ? 'bg-yellow-100 text-yellow-800'  // In Progress style
+                              : 'bg-red-100 text-red-800'        // Reported style
+                          }`}>
+                            {issue.status}
+                          </span>
+                        </div>
+                        
+                        {/* Location and Comments Information */}
+                        <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-4 h-4" />
+                            {issue.location}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <MessageSquare className="w-4 h-4" />
+                            {issue.comments} comments
+                          </span>
+                        </div>
+                        
+                        {/* Interaction Buttons - Voting and Sharing */}
+                        <div className="mt-4 flex items-center gap-4">
+                          {/* Voting Buttons */}
+                          <div className="flex items-center gap-2">
+                            <button className="p-1 hover:bg-gray-100 rounded">
+                              <ThumbsUp className="w-4 h-4" />
+                            </button>
+                            <span className="text-sm">{issue.votes}</span>
+                            <button className="p-1 hover:bg-gray-100 rounded">
+                              <ThumbsDown className="w-4 h-4" />
+                            </button>
+                          </div>
+                          {/* Share Button */}
+                          <button className="p-1 hover:bg-gray-100 rounded">
+                            <Share2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Dashboard;
