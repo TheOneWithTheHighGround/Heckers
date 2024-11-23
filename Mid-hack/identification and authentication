@@ -1,0 +1,15 @@
+//STEP 1: SIGN IN
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Sign in with email/password
+firebase.auth().signInWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    console.log("User signed in:", user);
+  })
+  .catch((error) => {
+    // Handle errors
+    console.error("Error signing in:", error);
+  });
